@@ -9,6 +9,14 @@ from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 from langchain_google_genai import GoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
+
+
+
+
+
+
+
+
 # Load environment variables from the .env file
 load_dotenv()
 
