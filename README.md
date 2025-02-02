@@ -47,6 +47,3 @@ License
 This project is open-source and available under the MIT License. See the LICENSE file for more details.
 
 Made with ❤️ using Streamlit, LangChain, and Google Generative AI.
-
-
-This README provides an overview of the project, setup instructions, and an explanation of how th
