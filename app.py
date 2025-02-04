@@ -10,13 +10,6 @@ from dotenv import load_dotenv
 from langchain_google_genai import GoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 
-
-
-
-
-
-
-
 # Load environment variables from the .env file
 load_dotenv()
 
@@ -37,7 +30,7 @@ def read_pdf(file):
     return raw_text
 
 
-# Streamlit App - Add custom CSS for a more colorful UI
+# Streamlit App
 st.markdown(
     """
     <style>
