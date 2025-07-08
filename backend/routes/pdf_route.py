@@ -16,12 +16,6 @@ async def read_root():
     return {"Hello": "World"}
 
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
-from PyPDF2 import PdfReader
-import io
-
-
 @router.post("/upload_document")
 async def upload_document(file: UploadFile):
     return await pdf_route.upload_document(file)
