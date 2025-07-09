@@ -26,9 +26,8 @@ from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env
-env_path = "../.env"
+env_path = "../backend/.env"
 load_dotenv(dotenv_path=env_path)
-
 
 # Fetch variables
 USER = os.getenv("user")
@@ -38,51 +37,64 @@ PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
 
 # # Construct the SQLAlchemy connection string
-# supabase_url = os.getenv("SUPABASE_URL")
-# google_genai_key = os.environ.get("GOOGLE_GENAI_KEY")
+supabase_url = os.getenv("SUPABASE_URL")
+google_genai_key = os.environ.get("GOOGLE_GENAI_KEY")
 
-# supabase_key = os.getenv("SUPABASE_SERVICE_KEY")
-# supabase: Client = create_client(supabase_url, supabase_key)
+
+supabase_key = os.getenv("SUPABASE_SERVICE_KEY")
+supabase: Client = create_client(supabase_url, supabase_key)
+
 
 # embeddings = GoogleGenerativeAIEmbeddings(
 #     model="models/gemini-embedding-exp-03-07", key=google_genai_key
 # )
 
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/gemini-embedding-exp-03-07",
+    google_api_key=google_genai_key,
+)
+
+# vector = embeddings.embed_query("hello, world!")
+# print(vector[:5])
+
 
 async def upload_document():
-    # loader = TextLoader("../resources/data.txt")
-    # documents = loader.load()
-    # text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=0)
-    # docs = text_splitter.split_documents(documents)
+    loader = TextLoader("data.txt")
+    documents = loader.load()
+    text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=0)
+    docs = text_splitter.split_documents(documents)
 
-    # vector_store = SupabaseVectorStore.from_documents(
-    #     docs,
-    #     embeddings,
-    #     client=supabase,
-    #     table_name="documents",
-    #     query_name="match_documents",
-    #     chunk_size=500,
-    # )
-
-    # vector_store = SupabaseVectorStore(
-    #     embedding=embeddings,
-    #     client=supabase,
-    #     table_name="documents",
-    #     query_name="match_documents",
-    # )
-
-    # query = "What is data science"
-    # matched_docs = vector_store.similarity_search(query)
-
-    GOOGLE_GENAI_KEY = os.environ.get("GOOGLE_GENAI_KEY")
-
-    embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/gemini-embedding-exp-03-07",
-        google_api_key=GOOGLE_GENAI_KEY,
+    vector_store = SupabaseVectorStore.from_documents(
+        docs,
+        embeddings,
+        client=supabase,
+        table_name="documents",
+        query_name="match_documents",
+        chunk_size=500,
     )
-    vector = embeddings.embed_query("hello, world!")
-    vector[:5]
-    return {"Matched_docs": vector[:5]}
+
+    vector_store = SupabaseVectorStore(
+        embedding=embeddings,
+        client=supabase,
+        table_name="documents",
+        query_name="match_documents",
+    )
+
+    query = "How is data science related to statistics?"
+    matched_docs = vector_store.similarity_search(query)
+    print(docs)
+    print("\n")
+    print(documents)
+    print(type(docs), type(docs))
+
+    return {"Matched_docs": matched_docs}
+
+    # embeddings = GoogleGenerativeAIEmbeddings(
+    #     model="models/gemini-embedding-exp-03-07",
+    #     google_api_key=google_genai_key,
+    # )
+    # vector = embeddings.embed_query("hello, world!")
+    # vector[:5]
 
 
 # # 1) Read the file bytes
