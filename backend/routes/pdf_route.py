@@ -3,8 +3,9 @@ from typing import Union
 from fastapi import FastAPI, Depends, APIRouter, UploadFile
 from typing import Annotated
 
-from database import create_db_and_tables
-import models
+# from database import create_db_and_tables
+
+# import models
 
 from services import pdf_route
 
@@ -17,5 +18,5 @@ async def read_root():
 
 
 @router.post("/upload_document")
-async def upload_document(file: UploadFile):
-    return await pdf_route.upload_document(file)
+async def upload_document():
+    return await pdf_route.upload_document()
