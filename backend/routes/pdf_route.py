@@ -18,5 +18,5 @@ async def read_root():
 
 
 @router.post("/upload_document")
-async def upload_document():
-    return await pdf_route.upload_document()
+async def upload_document(file: UploadFile):
+    return await pdf_route.upload_document(file)

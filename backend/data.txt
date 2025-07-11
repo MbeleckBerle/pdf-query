@@ -1,31 +1,49 @@
-
-Data science is an interdisciplinary academic field[1] that uses statistics, scientific computing, scientific methods, processing, 
-scientific visualization, algorithms and systems to extract or extrapolate knowledge and insights from potentially noisy, structured, or unstructured data.[2]
-
-Data science also integrates domain knowledge from the underlying application domain (e.g., natural sciences, information technology, and medicine).[3] 
-Data science is multifaceted and can be described as a science, a research paradigm, a research method, a discipline, a workflow, and a profession.[4]
-
-Data science is "a concept to unify statistics, data analysis, informatics, and their related methods" to "understand and analyze actual phenomena" 
-with data.[5] It uses techniques and theories drawn from many fields within the context of mathematics, statistics, computer science, information science, 
-and domain knowledge.[6] However, data science is different from computer science and information science. Turing Award winner Jim Gray imagined data science 
-as a "fourth paradigm" of science (empirical, theoretical, computational, and now data-driven) and asserted that "everything about science is changing because 
-of the impact of information technology" and the data deluge.[7][8]
-
-A data scientist is a professional who creates programming code and combines it with statistical knowledge to create insights from data.[9]
-Foundations
-Data science is an interdisciplinary field[10] focused on extracting knowledge from typically large data sets and applying the knowledge and insights from that
-data to solve problems in a wide range of application domains. The field encompasses preparing data for analysis, formulating data science problems, analyzing 
-data, developing data-driven solutions, and presenting findings to inform high-level decisions in a broad range of application domains. As such, it incorporates 
-skills from computer science, statistics, information science, mathematics, data visualization, information visualization, data sonification, data integration, 
-graphic design, complex systems, communication and business.[11][12] Statistician Nathan Yau, drawing on Ben Fry, also links data science to human–computer interaction: 
-users should be able to intuitively control and explore data.[13][14] In 2015, the American Statistical Association identified database management, statistics and 
-machine learning, and distributed and parallel systems as the three emerging foundational professional communities.[15]
-
-Relationship to statistics
-Many statisticians, including Nate Silver, have argued that data science is not a new field, but rather another name for statistics.[16] Others argue that data science is
-distinct from statistics because it focuses on problems and techniques unique to digital data.[17] Vasant Dhar writes that statistics emphasizes quantitative data and description.
-In contrast, data science deals with quantitative and qualitative data (e.g., from images, text, sensors, transactions, customer information, etc.) and emphasizes prediction and 
-action.[18] Andrew Gelman of Columbia University has described statistics as a non-essential part of data science.[19]
-
-Stanford professor David Donoho writes that data science is not distinguished from statistics by the size of datasets or use of computing and that many graduate programs misleadingly
-advertise their analytics and statistics training as the essence of a data-science program. He describes data science as an applied field growing out of traditional statistics.[20]
+MBELECK BERLE
+Edmonton, Alberta, Canada | 289-407-1738 | mbeleckberle@gmail.com | github.com/MbeleckBerle |
+linkedin.com/in/mbeleck-b-7a9818255
+Customer Service & Sales Professional
+Summary
+Friendly, adaptable, and customer-focused retail professional with 1+ year of experience in cashier operations, sales,
+and inventory management. Proven ability to create welcoming shopping environments, exceed performance targets,
+and contribute positively to team goals. Committed to fostering inclusive, respectful experiences in line with TJX
+values. Flexible, reliable, and always ready to learn and grow within dynamic retail settings.
+EXPERIENCE
+Sales & Operations Associate (Part-time) January 2025 – June 2025
+The Home Depot Edmonton, Alberta
+• Managed inventory and streamlined restocking processes, resulting in a 20% boost in product availability and reduced
+stock-outs.
+• Assisted customers in-store and in fitting room areas, providing helpful recommendations and maintaining a clean, safe
+space.
+• Supported backroom operations, including stock intake, item retrieval, and floor replenishment.
+• Played a key role in meeting and exceeding monthly sales targets through proactive problem solving and
+cross-departmental coordination.
+• Collaborated effectively with team members to improve workflow and enhance store cleanliness and presentation.
+Retail Associate June 2023 – October 2024
+Dollarama Edmonton, Alberta
+• Assisted customers with purchases, product inquiries, and returns, ensuring a friendly and efficient shopping experience.
+• Stocked shelves, organized displays, and maintained store cleanliness to support daily operations and merchandising
+standards.
+• Operated the cash register with 99.9% transaction accuracy across high-volume shifts.
+• Supported inventory counts and restocking, contributing to smooth backroom operations and reduced stock discrepancies.
+Store Cashier February 2022 – March 2023
+Walmart Supercentre Edmonton, Alberta
+• Processed cash, credit, and debit transactions efficiently, handling an average of 200 transactions per day with 99.8%
+accuracy.
+• Greeted and assisted over 150 customers per day, ensuring a positive and inclusive shopping experience.
+• Balanced cash register at the start and end of each shift with zero discrepancies.
+• Contributed to inventory management by restocking shelves and monitoring product levels.
+• Maintained fitting rooms and front area cleanliness to uphold store presentation standards.
+SKILLS SUMMARY
+• Accurate transaction processing and cash handling (99.8% accuracy across 300+ shifts)
+• Proficient with modern POS systems, handling up to 200 customers daily
+• Fitting room and backroom support, including stock organization and cleanliness
+• Customer service and interpersonal communication
+• Inventory management and shelf restocking
+• Flexible, adaptable, and team-oriented; thrive in fast-paced environments
+• Physically able to lift 50+ lb, sort mail, and stand for extended periods
+Education
+University of Alberta January 2020 – October 2024
+Bachelor of Science in Computer Science Edmonton, Alberta
+OTHER INFORMATION
+• Able to travel to store locations reliably
+• Available to work all full shifts, including evenings and weekends

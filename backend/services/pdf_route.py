@@ -1,130 +1,116 @@
 import io
-
-from typing import Annotated
-
+import os
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
-
-from sqlmodel import Session
-
-# from PyPDF2 import PdfReader
-
-# from schemas import Documents_create
-
-# from database import SessionDep
-
+from dotenv import load_dotenv
+import json
 
 from langchain_community.vectorstores import SupabaseVectorStore
-from supabase.client import Client, create_client
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-
-
+from supabase.client import create_client
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import CharacterTextSplitter
 
-from dotenv import load_dotenv
-import os
+# Load .env file
+load_dotenv("../backend/.env")
 
-# Load environment variables from .env
-env_path = "../backend/.env"
-load_dotenv(dotenv_path=env_path)
-
-# Fetch variables
-USER = os.getenv("user")
-PASSWORD = os.getenv("password")
-HOST = os.getenv("host")
-PORT = os.getenv("port")
-DBNAME = os.getenv("dbname")
-
-# # Construct the SQLAlchemy connection string
+# Environment variables
 supabase_url = os.getenv("SUPABASE_URL")
-google_genai_key = os.environ.get("GOOGLE_GENAI_KEY")
-
-
 supabase_key = os.getenv("SUPABASE_SERVICE_KEY")
-supabase: Client = create_client(supabase_url, supabase_key)
 
+supabase = create_client(supabase_url, supabase_key)
 
-# embeddings = GoogleGenerativeAIEmbeddings(
-#     model="models/gemini-embedding-exp-03-07", key=google_genai_key
-# )
+# FastAPI app
+app = FastAPI()
 
-embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/gemini-embedding-exp-03-07",
-    google_api_key=google_genai_key,
+# SentenceTransformer via LangChain wrapper
+embedding_model = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# vector = embeddings.embed_query("hello, world!")
-# print(vector[:5])
+
+async def upload_document(file: UploadFile = File(...)):
+    try:
+        # Load and read the file
+        contents = await file.read()
+        text = contents.decode("utf-8")
+
+        # Save it temporarily (optional, or stream it to loader)
+        file_path = f"services/{file.filename}"
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(text)
+
+        # Load and split the text
+        loader = TextLoader(file_path)
+        documents = loader.load()
+        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        docs = text_splitter.split_documents(documents)
+
+        # Create Supabase vector store
+        vector_store = SupabaseVectorStore.from_documents(
+            docs,
+            embedding_model,
+            client=supabase,
+            table_name="documents",
+            query_name="match_documents",
+        )
+
+        dtype = {
+            "docs": str(type(docs)),
+            "embedding model": str(type(embedding_model)),
+        }
+        print(dtype)
+        # print(docs)
+
+        # # Example query
+        # query = "what is data science?"
+        # results = vector_store.similarity_search(query, k=1)
+
+        # return [doc.page_content for doc in (docs)]
+        return docs
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-async def upload_document():
-    loader = TextLoader("data.txt")
-    documents = loader.load()
-    text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=0)
-    docs = text_splitter.split_documents(documents)
-
-    vector_store = SupabaseVectorStore.from_documents(
-        docs,
-        embeddings,
-        client=supabase,
-        table_name="documents",
-        query_name="match_documents",
-        chunk_size=500,
-    )
-
-    vector_store = SupabaseVectorStore(
-        embedding=embeddings,
-        client=supabase,
-        table_name="documents",
-        query_name="match_documents",
-    )
-
-    query = "How is data science related to statistics?"
-    matched_docs = vector_store.similarity_search(query)
-    print(docs)
-    print("\n")
-    print(documents)
-    print(type(docs), type(docs))
-
-    return {"Matched_docs": matched_docs}
-
-    # embeddings = GoogleGenerativeAIEmbeddings(
-    #     model="models/gemini-embedding-exp-03-07",
-    #     google_api_key=google_genai_key,
-    # )
-    # vector = embeddings.embed_query("hello, world!")
-    # vector[:5]
-
-
-# # 1) Read the file bytes
-# contents = await file.read()
-# if not contents:
-#     raise HTTPException(400, "Empty file")
-
-# # 2) Load into a BytesIO and parse with PyPDF2
-# try:
-#     reader = PdfReader(io.BytesIO(contents))
-# except Exception:
-#     raise HTTPException(400, "Failed to parse PDF")
-
-# # 3) Extract text from each page
-# text_pages = []
-# for page in reader.pages:
-#     page_text = page.extract_text()
-#     if page_text:
-#         text_pages.append(page_text)
-# full_text = "\n\n".join(text_pages)
-
-# if not full_text:
-#     raise HTTPException(400, "No extractable text found in PDF")
-
-# # 4) Return a preview
-# preview = full_text  # first 1,000 characters
-# return JSONResponse(
-#     {
-#         "filename": file.filename,
-#         "content_type": file.content_type,
-#         "preview": preview,
-#     }
-# )
+#  "construct",
+#     "copy",
+#     "dict",
+#     "from_orm",
+#     "get_lc_namespace",
+#     "id",
+#     "is_lc_serializable",
+#     "json",
+#     "lc_attributes",
+#     "lc_id",
+#     "lc_secrets",
+#     "metadata",
+#     "model_computed_fields",
+#     "model_config",
+#     "model_construct",
+#     "model_copy",
+#     "model_dump",
+#     "model_dump_json",
+#     "model_extra",
+#     "model_fields",
+#     "model_fields_set",
+#     "model_json_schema",
+#     "model_parametrized_name",
+#     "model_post_init",
+#     "model_rebuild",
+#     "model_validate",
+#     "model_validate_json",
+#     "model_validate_strings",
+#     "page_content",
+#     "parse_file",
+#     "parse_obj",
+#     "parse_raw",
+#     "schema",
+#     "schema_json",
+#     "to_json",
+#     "to_json_not_implemented",
+#     "type",
+#     "update_forward_refs",
+#     "validate"
+#   ]
+# }
