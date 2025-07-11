@@ -3,8 +3,9 @@ import os
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
-import json
 
+from PyPDF2 import PdfReader
+from langchain_core.documents import Document
 from langchain_community.vectorstores import SupabaseVectorStore
 from supabase.client import create_client
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -14,39 +15,51 @@ from langchain_text_splitters import CharacterTextSplitter
 # Load .env file
 load_dotenv("../backend/.env")
 
-# Environment variables
+# Supabase setup
 supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_SERVICE_KEY")
-
 supabase = create_client(supabase_url, supabase_key)
 
 # FastAPI app
 app = FastAPI()
 
-# SentenceTransformer via LangChain wrapper
+# Embedding model
 embedding_model = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
 
+@app.post("/upload-document")
 async def upload_document(file: UploadFile = File(...)):
     try:
-        # Load and read the file
+        # 1) Read raw bytes
         contents = await file.read()
-        text = contents.decode("utf-8")
 
-        # Save it temporarily (optional, or stream it to loader)
-        file_path = f"services/{file.filename}"
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(text)
+        # 2) Extract text depending on file type
+        documents = []
+        if file.filename.lower().endswith(".pdf"):
+            reader = PdfReader(io.BytesIO(contents))
+            for i, page in enumerate(reader.pages):
+                text = page.extract_text() or ""
+                documents.append(
+                    Document(
+                        page_content=text,
+                        metadata={"source": file.filename, "page": i + 1},
+                    )
+                )
+        else:
+            # treat as plain text
+            text = contents.decode("utf-8")
+            # you can still use TextLoader, but here we just wrap in Document
+            documents.append(
+                Document(page_content=text, metadata={"source": file.filename})
+            )
 
-        # Load and split the text
-        loader = TextLoader(file_path)
-        documents = loader.load()
+        # 3) Split into chunks
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         docs = text_splitter.split_documents(documents)
 
-        # Create Supabase vector store
+        # 4) Upsert into Supabase Vector Store
         vector_store = SupabaseVectorStore.from_documents(
             docs,
             embedding_model,
@@ -55,62 +68,14 @@ async def upload_document(file: UploadFile = File(...)):
             query_name="match_documents",
         )
 
-        dtype = {
-            "docs": str(type(docs)),
-            "embedding model": str(type(embedding_model)),
-        }
-        print(dtype)
-        # print(docs)
-
-        # # Example query
-        # query = "what is data science?"
-        # results = vector_store.similarity_search(query, k=1)
-
-        # return [doc.page_content for doc in (docs)]
-        return docs
+        # 5) Return a simple list of chunk texts (or you could issue a query)
+        return JSONResponse(
+            {
+                "filename": file.filename,
+                "chunks_stored": len(docs),
+                "chunks": [doc.page_content for doc in docs],
+            }
+        )
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
-#  "construct",
-#     "copy",
-#     "dict",
-#     "from_orm",
-#     "get_lc_namespace",
-#     "id",
-#     "is_lc_serializable",
-#     "json",
-#     "lc_attributes",
-#     "lc_id",
-#     "lc_secrets",
-#     "metadata",
-#     "model_computed_fields",
-#     "model_config",
-#     "model_construct",
-#     "model_copy",
-#     "model_dump",
-#     "model_dump_json",
-#     "model_extra",
-#     "model_fields",
-#     "model_fields_set",
-#     "model_json_schema",
-#     "model_parametrized_name",
-#     "model_post_init",
-#     "model_rebuild",
-#     "model_validate",
-#     "model_validate_json",
-#     "model_validate_strings",
-#     "page_content",
-#     "parse_file",
-#     "parse_obj",
-#     "parse_raw",
-#     "schema",
-#     "schema_json",
-#     "to_json",
-#     "to_json_not_implemented",
-#     "type",
-#     "update_forward_refs",
-#     "validate"
-#   ]
-# }
