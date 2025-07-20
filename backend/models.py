@@ -1,7 +1,6 @@
 from typing import List
 
-from fastapi import Depends, FastAPI, HTTPException, Query
-from sqlmodel import Field, Session, SQLModel, create_engine, select, Column, JSON
+from sqlmodel import Field, SQLModel, Column, JSON
 
 
 class documents(SQLModel, table=True):
