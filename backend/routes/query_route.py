@@ -70,17 +70,18 @@ async def send_query(query: str):
 
         # # Example query
         # query = "what is data science?"
-        results = vector_store.similarity_search(query, k=1)
+        results = vector_store.similarity_search(query, k=5)
+        # print(results)
         content = str(results[0].page_content).replace("\n", " ")
 
         messages = [
             {
                 "role": "system",
-                "content": f"only use the proviced to answer the question{content}",
+                "content": f"only use the provided document to answer the questions else respond 'information not available'{content}.",
             },
             {
                 "role": "user",
-                "content": f"{query}",
+                "content": f"According to the document, {query}",
             },
         ]
 

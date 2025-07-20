@@ -56,7 +56,7 @@ async def upload_document(file: UploadFile = File(...)):
             )
 
         # 3) Split into chunks
-        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
         docs = text_splitter.split_documents(documents)
 
         # 4) Upsert into Supabase Vector Store
